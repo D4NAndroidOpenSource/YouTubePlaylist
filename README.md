@@ -3,9 +3,12 @@ YouTubePlaylist
 
 A sample Android application which demonstrates the use of the [YouTube Data API v3](https://developers.google.com/youtube/v3/).
 
-This sample app makes use of the [YouTube Data API v3 classes] (https://developers.google.com/resources/api-libraries/documentation/youtube/v3/java/latest/) to fetch a YouTube [Playlist](https://developers.google.com/resources/api-libraries/documentation/youtube/v3/java/latest/com/google/api/services/youtube/model/Playlist.html) using the [GetPlaylistAsyncTask](app/src/main/java/com/akoscz/youtube/GetPlaylistAsyncTask.java) which then extracts the list of [Video](https://developers.google.com/resources/api-libraries/documentation/youtube/v3/java/latest/com/google/api/services/youtube/model/Video.html)'s the playlist contains.  The list of video's are then presented using a [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html) of [CardView](https://developer.android.com/reference/android/support/v7/widget/CardView.html)'s in the [YouTubeRecyclerViewFragment](app/src/main/java/com/akoscz/youtube/YouTubeRecyclerViewFragment.java).  The data binding of video details to the [Video Card](app/src/main/res/layout/youtube_databinding_video_card.xml) is handled by the [PlaylistDatabindingCardAdapter](app/src/main/java/com/akoscz/youtube/PlaylistDatabindingCardAdapter.java).
+This sample app makes use of the [YouTube Data API v3 classes] (https://developers.google.com/resources/api-libraries/documentation/youtube/v3/java/latest/) to fetch a YouTube [Playlist](https://developers.google.com/resources/api-libraries/documentation/youtube/v3/java/latest/com/google/api/services/youtube/model/Playlist.html) using [RxJava](https://github.com/ReactiveX/RxJava) to perform the network I/O operation on a background thread where the list of [Video](https://developers.google.com/resources/api-libraries/documentation/youtube/v3/java/latest/com/google/api/services/youtube/model/Video.html)'s contained in the playlist are extracted and then handed off to the UI thread for rendering.  The list of video's are rendered using a [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html) of [CardView](https://developer.android.com/reference/android/support/v7/widget/CardView.html)'s in the [YouTubeRecyclerViewFragment](app/src/main/java/com/akoscz/youtube/YouTubeRecyclerViewFragment.java).
 
-[Picasso](https://github.com/square/picasso) is used for downloading and caching the video thumbnail images.
+The [Android data binding support tools](http://developer.android.com/tools/data-binding/guide.html) are then used to bind the the data to the UI. The [PlaylistCardAdapter](app/src/main/java/com/akoscz/youtube/PlaylistCardAdapter.java) is responsible for binding a [VideoViewModel](app/src/main/java/com/akoscz/youtube/viewmodel/VideoViewModel.java) instance to the [Video Card](app/src/main/res/layout/youtube_video_card.xml) layout.
+
+
+[Picasso](https://github.com/square/picasso) is used for [downloading](app/src/main/java/com/akoscz/youtube/databinding/BindingUtils.java) and caching the video thumbnail images.
 And lastly a [retained fragment](http://developer.android.com/guide/topics/resources/runtime-changes.html#RetainingAnObject) is used to persist the [Playlist](app/src/main/java/com/akoscz/youtube/model/Playlist.java) datamodel across orientation changes.
 
 ## Setup
@@ -27,10 +30,13 @@ And lastly a [retained fragment](http://developer.android.com/guide/topics/resou
   * [com.google.http-client:google-http-client-android:1.20.0](https://github.com/google/google-http-java-client)
   * [com.google.api-client:google-api-client-android:1.20.0](https://github.com/google/google-api-java-client)
   * [com.google.api-client:google-api-client-gson:1.20.0](https://github.com/google/google-api-java-client)
-
+  * [io.reactivex:rxandroid:1.0.1](https://github.com/ReactiveX/RxAndroid)
+  * [io.reactivex:rxjava:1.0.14](https://github.com/ReactiveX/RxJava)
+  
 ## Build Script Dependencies
   * [com.android.tools.build:gradle:1.3.1](https://developer.android.com/tools/revisions/gradle-plugin.html)
   * [com.android.databinding:dataBinder:1.0-rc1](http://developer.android.com/tools/data-binding/guide.html)
+  * [me.tatarka:gradle-retrolambda:3.2.3](https://github.com/evant/gradle-retrolambda)
 
 ## Screenshots
 __Phone__: Single Column Portrait and Landscape
